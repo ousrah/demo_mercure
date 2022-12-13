@@ -30,6 +30,10 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+use Symfony\Component\Mercure\HubInterface;
+use Symfony\Component\Mercure\Update;
+
+
 /**
  * Controller used to manage blog contents in the public part of the site.
  *
@@ -188,4 +192,19 @@ class BlogController extends AbstractController
 
         return $this->json($results);
     }
+
+    #[Route('/push',  name: 'push')]
+    public function publish(HubInterface $hub): Response
+    {
+        $update = new Update(
+            'https://example.com/books/1',
+            json_encode(['status' => 'OutOfStock'])
+        );
+
+        $hub->publish($update);
+
+        return new Response('published!');
+    }
+
+
 }

@@ -41,4 +41,18 @@
             </div>
         </div>
     </div>
+    <div id="message" class="bg-primary">
+        nothing
+            </div>
+
 {% endblock %}
+{% block javascripts %}   
+         <script>
+                const eventSource = new EventSource("{{ mercure('https://example.com/books/1')|escape('js') }}");
+                eventSource.onmessage = event => {
+             
+                    document.getElementById('message').innerHTML += "<div class='bg-success'>"+JSON.parse(event.data).status+"</div>";
+                }
+                </script>
+{% endblock %}
+
